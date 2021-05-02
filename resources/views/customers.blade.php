@@ -33,6 +33,7 @@
                         </div>
                     </div>
                     <div class="card-body">
+                        @if(count($customers))
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                             <tr>
@@ -87,6 +88,10 @@
                             @endforeach
                             </tbody>
                         </table>
+                        @else
+                            <h5 class="text-center m-3 mx-auto text-secondary">You don't have any data you can to add
+                                some</h5>
+                        @endif
                     </div>
                 </div>
             </div>

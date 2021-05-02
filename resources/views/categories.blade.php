@@ -25,49 +25,61 @@
                             </div>
                             <div class="col-auto">
                                 <div class="card-tools">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#categoriesModal" data-action="Create" >Create Category</button>
+                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#categoriesModal" data-action="Create">Create Category
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            @foreach($categories as $category)
+                        @if(count($categories))
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
                                 <tr>
-                                    <td>{{ $category->id }}</td>
-                                    <td>{{ $category->name }}</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#categoriesModal" data-action="Show" data-category="{{$category}}">
-                                                <i class="bi bi-search" data-toggle="tooltip"></i>
-                                            </a>
-                                            <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#categoriesModal" data-action="Edit" data-category="{{$category}}">
-                                                <i class="bi bi-pencil-fill" data-toggle="tooltip"></i>
-                                            </a>
-                                            <form class="form-inline" method="post" action="{{route('categories.destroy',$category) }}"
-                                                  onsubmit="return confirm('Are You Sure to Delete the Category?')">
-                                                <input type="hidden" name="_method" value="delete">
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-
-                                                <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-
-                                        </div>
-                                    </td>
+                                    <th>Id</th>
+                                    <th>Name</th>
+                                    <th>Actions</th>
                                 </tr>
-                            @endforeach
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                @foreach($categories as $category)
+                                    <tr>
+                                        <td>{{ $category->id }}</td>
+                                        <td>{{ $category->name }}</td>
+                                        <td>
+                                            <div class="btn-group" role="group">
+                                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal"
+                                                   data-target="#categoriesModal" data-action="Show"
+                                                   data-category="{{$category}}">
+                                                    <i class="bi bi-search" data-toggle="tooltip"></i>
+                                                </a>
+                                                <a href="#" class="btn btn-secondary btn-sm" data-toggle="modal"
+                                                   data-target="#categoriesModal" data-action="Edit"
+                                                   data-category="{{$category}}">
+                                                    <i class="bi bi-pencil-fill" data-toggle="tooltip"></i>
+                                                </a>
+                                                <form class="form-inline" method="post"
+                                                      action="{{route('categories.destroy',$category) }}"
+                                                      onsubmit="return confirm('Are You Sure to Delete the Category?')">
+                                                    <input type="hidden" name="_method" value="delete">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                                    <button type="submit" class="btn btn-danger btn-sm">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        @else
+                            <h5 class="text-center m-3 mx-auto text-secondary">You don't have any data you can to add
+                                some</h5>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -117,11 +129,11 @@
 
         $(".messageFromServer").delay(3000).hide("fast");
 
-        function resetErrorsFormMessage(){
+        function resetErrorsFormMessage() {
             $("strong[id$='-error']").html("");
         }
 
-        $('#categoriesModal').on('show.bs.modal',function(e){
+        $('#categoriesModal').on('show.bs.modal', function (e) {
             var actionButton = $(e.relatedTarget);
             var actionType = actionButton.data('action');
             $("#actionType").val(actionType);
@@ -132,21 +144,21 @@
             modal.find('.modal-title').text(actionType + ' Category');
             $("#submitForm").show();
 
-            if(actionType == 'Edit' ||actionType =='Show'){
+            if (actionType == 'Edit' || actionType == 'Show') {
                 var category = actionButton.data('category');
                 $("#id").val(category.id);
                 $("#name").val(category.name);
-                if(actionType =='Show'){
+                if (actionType == 'Show') {
                     $("#submitForm").hide();
                 }
-            } else{
+            } else {
                 $("#id").val(null);
                 $("#categoryForm").trigger("reset");
             }
         });
 
 
-        $('body').on('click','#submitForm', function(e){
+        $('body').on('click', '#submitForm', function (e) {
             e.preventDefault();
             var categoryForm = $("#categoryForm");
             var formData = categoryForm.serialize();
@@ -156,13 +168,13 @@
 
             $.ajax({
                 url: url,
-                type:'POST',
+                type: 'POST',
                 data: formData,
-                success: function(data){
+                success: function (data) {
                     $('#categoriesModal').modal('hide');
                     window.location.href = url;
                 },
-                error: function(jqXHR, textStatus, errorThrown){
+                error: function (jqXHR, textStatus, errorThrown) {
                     var data = jqXHR.responseJSON;
                     if (data.errors) {
                         for (var key in data.errors) {

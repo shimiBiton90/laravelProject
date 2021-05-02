@@ -27,13 +27,13 @@
                 </li>
             </ul>
             <div class="container">
-                <div class="row justify-content-between">
-                    <div class="col-4">
+                <div class="row">
+                    <div class="col-auto mr-auto">
                         <a class="navbar-brand" href="{{ url('/') }}">
                             {{ config('app.name', 'Laravel') }}
                         </a>
                     </div>
-                    <div class="col-1">
+                    <div class="col-auto">
                         <div class="navbar-collapse" id="navbarSupportedContent">
                             <!-- Left Side Of Navbar -->
                             <ul class="navbar-nav mr-auto">
